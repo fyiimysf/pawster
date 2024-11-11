@@ -1,0 +1,25 @@
+{
+  "cwd": "/home/jfifi/Documents/Framework7/",
+  "type": [
+    "pwa",
+    "capacitor"
+  ],
+  "name": "Pawster",
+  "framework": "react",
+  "template": "tabs",
+  "bundler": "vite",
+  "cssPreProcessor": false,
+  "theming": {
+    "customColor": true,
+    "color": "#f5c7ff",
+    "darkMode": true,
+    "iconFonts": true
+  },
+  "customBuild": false,
+  "pkg": "io.framework7.myapp",
+  "capacitor": {
+    "platforms": [
+      "android"
+    ]
+  }
+}
