@@ -40,7 +40,7 @@ import HomePage from "../pages/home";
 import MainPage from "../pages/main";
 import SignupPage from "../pages/signup";
 
-import supabase from './supabaseClient'
+import supabase from '../utils/supabase.js'
 
 
 
@@ -306,7 +306,6 @@ let dMode = true;
           <Link
             tabLink="#view-catalog"
             tabLinkActive
-            iconSize={35}
             iconIos="f7:paw"
             iconMd="f7:paw"
             text="Cat-alog"

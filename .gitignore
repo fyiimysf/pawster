@@ -28,8 +28,7 @@ node_modules/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
-.env.local
+.env.*.local
 
 # Misc
 .DS_Store
@@ -51,3 +50,4 @@ resources/windows/splash
 
 # Production build
 www/
+.vercel

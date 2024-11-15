@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "npm run dev",
-    "dev": "cross-env NODE_ENV=development env-cmd -f .env vite",
+    "dev": "cross-env NODE_ENV=development env-cmd -f .env.*.local vite",
     "build": "cross-env NODE_ENV=production vite build && npx workbox generateSW workbox-config.js",
     "build-capacitor-android": "cross-env NODE_ENV=production vite build && npx cap copy android",
     "postinstall": "cpy --flat ./node_modules/framework7-icons/fonts/*.* ./src/fonts/ && cpy --flat ./node_modules/material-icons/iconfont/*.* ./src/fonts/"
@@ -29,6 +29,7 @@
     "@capacitor/status-bar": "^6.0.1",
     "@clerk/clerk-react": "^5.11.0",
     "@supabase/supabase-js": "^2.45.4",
+    "@vercel/postgres": "^0.10.0",
     "dom7": "^4.0.6",
     "dotenv": "^16.4.5",
     "env-cmd": "^10.1.0",

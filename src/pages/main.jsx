@@ -48,7 +48,14 @@ function MainPage() {
         </BlockTitle >
         <Button large fillMd roundIos largeIos tonalIos loginScreenOpen='#login-screen'>Login</Button>
         <Button large fillMd roundIos largeIos tonalIos loginScreenOpen='#signup-screen' >SignUp</Button>
-        <center> <BlockHeader>Feline paws, could be yours</BlockHeader> </center>
+        <center> <BlockHeader>Feline paws, could be yours</BlockHeader> 
+        
+        <Button small  onClick={()=>{
+          f7.loginScreen.close();
+          f7.loginScreen.close();
+          f7.loginScreen.close();
+        }}  >Demo the App</Button>
+         </center>
       </Block>
     </Page>
   );

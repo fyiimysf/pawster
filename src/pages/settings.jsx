@@ -15,7 +15,7 @@ import {
   CardHeader,
   f7,
 } from 'framework7-react';
-import supabase from '../components/supabaseClient';
+import supabase from '../utils/supabase.js';
 
 
 const SettingsPage = ({ dmodeVal, username }) => {
