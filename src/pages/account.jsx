@@ -31,7 +31,7 @@ const AccountPage = ({name, user, email}) => (
         <img
           slot="media"
           style={{ borderRadius: '10px' }}
-          src="../assets/imgs/def_av.png"
+          src="https://vbjluyefvsofglojkskp.supabase.co/storage/v1/object/public/pawster_assets/imgs/def_av.png"
           width="80"
         />
       </ListItem>

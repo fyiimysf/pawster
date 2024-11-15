@@ -4,6 +4,7 @@ import {
   f7,
   f7ready,
   App,
+  Fab,
   Panel,
   Views,
   View,
@@ -27,7 +28,7 @@ import {
   Card,
   CardContent,
   BlockHeader,
-  theme
+  theme,
 } from "framework7-react";
 
 import capacitorApp from "../js/capacitor-app";
@@ -40,19 +41,14 @@ import HomePage from "../pages/home";
 import MainPage from "../pages/main";
 import SignupPage from "../pages/signup";
 
-import supabase from '../utils/supabase.js'
-
-
+import supabase from "../utils/supabase.js";
+import FavPage from "../pages/favPage.jsx";
 
 const MyApp = () => {
-
   // Login screen demo data
   const device = getDevice();
-  
-  
 
-
-let dMode = true;
+  let dMode = true;
   // Framework7 Parameters
   const f7params = {
     name: "Pawster", // App name
@@ -67,14 +63,12 @@ let dMode = true;
     // App routes
     routes: routes,
 
-
-
     // Register service worker (only on production build)
     serviceWorker:
       process.env.NODE_ENV === "production"
         ? {
-          path: "/service-worker.js",
-        }
+            path: "/service-worker.js",
+          }
         : {},
     // Input settings
     input: {
@@ -86,7 +80,6 @@ let dMode = true;
       iosOverlaysWebView: false,
       androidOverlaysWebView: true,
     },
-
   };
 
   f7ready(() => {
@@ -97,25 +90,22 @@ let dMode = true;
     // Call F7 APIs here
   });
 
-
-
   const [name, setName, getName] = useState("");
   const [user, setUsername, getUsername] = useState("");
   const [email, setEmail, getEmail] = useState("");
   const [pass, setPassword, getPassword] = useState("");
   const toastIcon = useRef(null);
 
-
   //------------------    TOASTS    ------------------------
   const AccToast = (int) => {
     // Create toast
-    if (int == 0) { //Logged In
+    if (int == 0) {
+      //Logged In
       if (!toastIcon.current) {
         toastIcon.current = f7.toast.create({
-          icon:
-            '<i class="f7-icons">checkmark_circle</i>',
+          icon: '<i class="f7-icons">checkmark_circle</i>',
           text: "Log In Succesfull",
-          position: 'center',
+          position: "center",
           closeButton: true,
           closeTimeout: 1000,
         });
@@ -123,13 +113,13 @@ let dMode = true;
       // Open it
       toastIcon.current.open();
     }
-    if (int == 1) { //Acc created
+    if (int == 1) {
+      //Acc created
       if (!toastIcon.current) {
         toastIcon.current = f7.toast.create({
-          icon:
-            '<i class="f7-icons">person_crop_circle_badge_checkmark</i>',
+          icon: '<i class="f7-icons">person_crop_circle_badge_checkmark</i>',
           text: "Account has been created",
-          position: 'center',
+          position: "center",
           closeButton: true,
           closeTimeout: 1000,
         });
@@ -141,12 +131,13 @@ let dMode = true;
 
   const errorAccToast = (int) => {
     // Create toast
-    if (int == 0) { //Error 0
+    if (int == 0) {
+      //Error 0
       if (!toastIcon.current) {
         toastIcon.current = f7.toast.create({
           icon: '<i class="f7-icons">person_crop_circle_badge_xmark</i>',
           text: "Account does not exist, Or Invalid credentials were added",
-          position: 'bottom',
+          position: "bottom",
           closeButton: true,
           closeTimeout: 3000,
         });
@@ -154,12 +145,13 @@ let dMode = true;
       // Open it
       toastIcon.current.open();
     }
-    if (int == 1) { //Error 1
+    if (int == 1) {
+      //Error 1
       if (!toastIcon.current) {
         toastIcon.current = f7.toast.create({
           icon: '<i class="f7-icons">exclamationmark_triangle</i>',
           text: "Account cannot be made, Try again later",
-          position: 'bottom',
+          position: "bottom",
           closeButton: true,
           closeTimeout: 3000,
         });
@@ -167,12 +159,13 @@ let dMode = true;
       // Open it
       toastIcon.current.open();
     }
-    if (int == 2) { //Error 2
+    if (int == 2) {
+      //Error 2
       if (!toastIcon.current) {
         toastIcon.current = f7.toast.create({
           icon: '<i class="f7-icons">person_crop_circle_badge_exclam</i>',
           text: "Login Failed",
-          position: 'bottom',
+          position: "bottom",
           closeButton: true,
           closeTimeout: 3000,
         });
@@ -180,12 +173,13 @@ let dMode = true;
       // Open it
       toastIcon.current.open();
     }
-    if (int == 3) { //Error 3
+    if (int == 3) {
+      //Error 3
       if (!toastIcon.current) {
         toastIcon.current = f7.toast.create({
           icon: '<i class="f7-icons">exclamationmark_shield</i>',
           text: "Account already exits",
-          position: 'bottom',
+          position: "bottom",
           closeButton: true,
           closeTimeout: 3000,
         });
@@ -196,112 +190,105 @@ let dMode = true;
   };
 
   async function addUser() {
-    const { error } = await supabase
-      .from('users')
-      .insert([
-        {
-          Name: name,
-          Username: user,
-          Email: email,
-          Password: pass,
-        },
-      ])
+    const { error } = await supabase.from("users").insert([
+      {
+        Name: name,
+        Username: user,
+        Email: email,
+        Password: pass,
+      },
+    ]);
     if (!error) {
       f7.loginScreen.close();
       f7.loginScreen.close();
       f7.loginScreen.close();
       AccToast(1);
-    } 
-    else if(error.code == '23505'){
+    } else if (error.code == "23505") {
       errorAccToast(3);
-    }
-    else {
-      console.log(error.message, error.code)
+    } else {
+      console.log(error.message, error.code);
       errorAccToast(1);
     }
   }
 
-  
   //CHECK USER Func
   async function checkUser() {
-
-    let uBool = false
-    let pBool = false
+    let uBool = false;
+    let pBool = false;
 
     const { data: unames, error: errorU } = await supabase
-      .from('users')
-      .select('Username,Email,Name,darkMode')
+      .from("users")
+      .select("Username,Email,Name,darkMode");
     if (!errorU) {
-      unames.forEach(element => {
+      unames.forEach((element) => {
         if (user == element.Username) {
           uBool = true;
-          setEmail(element.Email)
-          setName(element.Name)
-          if(element.darkMode == true){
-            dMode = true
-            f7.setDarkMode(true)
-          }else{
-            dMode = false
-            f7.setDarkMode(false)
+          setEmail(element.Email);
+          setName(element.Name);
+          if (element.darkMode == "true") {
+            dMode = true;
+            f7.setDarkMode(true);
+            console.log("darkMode is " + dMode);
+          } else {
+            dMode = false;
+            f7.setDarkMode(false);
+            console.log("darkMode is " + dMode);
           }
         }
       });
     } else {
-      console.log(errorU.message)
+      console.log(errorU.message);
       errorAccToast(2);
     }
 
     const { data: passw, error: errorP } = await supabase
-      .from('users')
-      .select('Password')
+      .from("users")
+      .select("Password");
     if (!errorP) {
-      passw.forEach(element => {
+      passw.forEach((element) => {
         if (pass == element.Password) {
           pBool = true;
         }
       });
     } else {
-      console.log(errorP.message)
+      console.log(errorP.message);
       errorAccToast(2);
-
     }
     if (uBool && pBool) {
       f7.loginScreen.close();
       f7.loginScreen.close();
       f7.loginScreen.close();
-      AccToast(0)
+      AccToast(0);
     } else {
       errorAccToast(0);
     }
   }
 
   const alertSignUpData = () => {
-    f7.dialog.confirm(`Do you wish to make the account with this information? `, async () => {
-      addUser()
-    });
+    f7.dialog.confirm(
+      `Do you wish to make the account with this information? `,
+      async () => {
+        addUser();
+      }
+    );
   };
 
-  
-
   return (
-
-    <App  {...f7params}>
-
+    <App {...f7params}>
       {/* Views/Tabs container */}
-      
-      <LoginScreen id={'main-screen'} opened >
+
+      <LoginScreen id={"main-screen"} opened>
         <MainPage />
       </LoginScreen>
 
-
       <Views tabs className="safe-areas">
         {/* Tabbar for switching views-tabs */}
-        <Toolbar icons  tabbar  bottom >
+        <Toolbar icons tabbar bottom>
           <Link
             tabLink="#view-acc"
-            iconIos="f7:person_circle"
-            iconMd="f7:person_circle"
-            text="Account"
+            iconIos="f7:heart_fill"
+            iconMd="f7:heart_fill"
+            text="Favorites"
           />
           <Link
             tabLink="#view-catalog"
@@ -318,36 +305,215 @@ let dMode = true;
           />
         </Toolbar>
 
-
-
         {/* Your main view/tab, should have "view-main" class. It also has "tabActive" prop */}
-        <View className="safe-areas" id="view-acc" tab >
-          <AccountPage email={email} name={name} user={user} />
+        <View className="safe-areas" id="view-acc" tab>
+          <FavPage email={email} name={name} user={user} />
         </View>
 
         {/* Catalog View */}
-        <View className="safe-areas" id="view-catalog" tabActive name="catalog" tab>
+        <View
+          className="safe-areas"
+          id="view-catalog"
+          tabActive
+          name="catalog"
+          tab
+        >
           <CatLogPage />
         </View>
 
         {/* Settings View */}
-        <View className="safe-areas" id="view-settings" name="settings" tab  >
-          <SettingsPage getDmodeVal={dMode} username={user} />
+        <View className="safe-areas" id="view-settings" name="settings" tab>
+          <SettingsPage
+            dmodeVal={dMode}
+            username={user}
+            name={name}
+            user={user}
+            email={email}
+          />
         </View>
       </Views>
-
 
       {/* Popup */}
       <Popup id="my-popup">
         <View>
           <Page>
-            <Navbar title="Popup">
+            <Navbar title="Account Settings">
               <NavRight>
-                <Link popupClose>Close</Link>
+                <Link popupClose>
+                  <Icon ios="f7:close" md="material:close"></Icon>
+                </Link>
               </NavRight>
             </Navbar>
-            <Block>
-              <p>Popup content goes here.</p>
+            <Card>
+              <CardContent>
+                <List dividersIos mediaList outlineIos strongIos>
+                  <ListItem title={name} subtitle={user} text={email}>
+                    <img
+                      slot="media"
+                      style={{ borderRadius: "10px" }}
+                      src="https://vbjluyefvsofglojkskp.supabase.co/storage/v1/object/public/pawster_assets/imgs/def_av.png"
+                      width="65"
+                    />
+                  </ListItem>
+                </List>
+                <center>
+                  <BlockTitle>Update Account</BlockTitle>
+                </center>
+                <List strong inset dividersIos>
+                  <ListItem
+                    title="Change Username"
+                    onClick={() => {
+                      f7.dialog.prompt("Enter your new username", (val) => {
+                        f7.dialog.confirm(
+                          `Are you sure you want to change your username to ${val}?`,
+                          async () => {
+                            const { error } = await supabase
+                              .from("users")
+                              .update({ Username: val })
+                              .eq("Username", user);
+                            if (!error) {
+                              f7.dialog.alert("Username updated");
+                              setUsername(val);
+                            } else {
+                              f7.dialog.alert(
+                                "Username not updated, Account already exits"
+                              );
+                              console.log(error.message);
+                            }
+                          }
+                        );
+                      });
+                    }}
+                  />
+                  <ListItem
+                    title="Change Password"
+                    onClick={() => {
+                      f7.dialog.prompt(
+                        "Enter your old password",
+                        async (val) => {
+                          const { data, error } = await supabase
+                            .from("users")
+                            .select("Password")
+                            .eq("Username", user);
+                          if (!error) {
+                            data.forEach((element) => {
+                              if (val == element.Password) {
+                                f7.dialog.prompt(
+                                  "Enter your new password",
+                                  (val) => {
+                                    f7.dialog.confirm(
+                                      `Are you sure you want to change your password?`,
+                                      async () => {
+                                        const { error } = await supabase
+                                          .from("users")
+                                          .update({ Password: val })
+                                          .eq("Username", user);
+                                        if (!error) {
+                                          f7.dialog.alert("Password updated");
+                                        } else {
+                                          f7.dialog.alert(
+                                            "Password not updated, Account already exits"
+                                          );
+                                          console.log(error.message);
+                                        }
+                                      }
+                                    );
+                                  }
+                                );
+                              } else {
+                                f7.dialog.alert("Incorrect Password");
+                              }
+                            });
+                          } else {
+                            console.log(error.message);
+                          }
+                        }
+                      );
+                    }}
+                  />
+                  <ListItem
+                    title="Change Email"
+                    onClick={() => {
+                      f7.dialog.prompt("Enter your new Email", (val) => {
+                        f7.dialog.confirm(
+                          `Are you sure you want to change your Email to ${val}?`,
+                          async () => {
+                            const { error } = await supabase
+                              .from("users")
+                              .update({ Email: val })
+                              .eq("Username", user);
+                            if (!error) {
+                              f7.dialog.alert("Email updated");
+                              setEmail(val);
+                            } else {
+                              f7.dialog.alert("Email not updated!");
+                              console.log(error.message);
+                            }
+                          }
+                        );
+                      });
+                    }}
+                  />
+                  <ListItem
+                    title="Change Name"
+                    onClick={() => {
+                      f7.dialog.prompt("Enter your new Name", (val) => {
+                        f7.dialog.confirm(
+                          `Are you sure you want to change your Name to ${val}?`,
+                          async () => {
+                            const { error } = await supabase
+                              .from("users")
+                              .update({ Name: val })
+                              .eq("Username", user);
+                            if (!error) {
+                              f7.dialog.alert("Name updated");
+                              setName(val);
+                            } else {
+                              f7.dialog.alert("Name not updated!");
+                              console.log(error.message);
+                            }
+                          }
+                        );
+                      });
+                    }}
+                  />
+                </List>
+              </CardContent>
+              <br />
+            </Card>
+            <Block className="grid grid-gap">
+              <Button
+                textColor="red"
+                borderColor="red"
+                outline
+                largeIos
+                tonalIos
+                onClick={() => {
+                  f7.dialog.confirm(
+                    "Are you sure you want to delete your account?",
+                    async () => {
+                      const { error } = await supabase
+                        .from("users")
+                        .delete()
+                        .eq("Username", user);
+                      if (!error) {
+                        f7.dialog.preloader("Deleting Account");
+                        setTimeout(() => {
+                          f7.dialog.close();
+                          f7.dialog.alert("Account Deleted");
+                          f7.popup.close();
+                          f7.loginScreen.open("#main-screen");
+                          f7.setDarkMode(true);
+                        }, 3000);
+                      } else {
+                        console.log(error.message);
+                      }
+                    }
+                  );
+                }}
+              >
+                Delete Account
+              </Button>
             </Block>
           </Page>
         </View>
@@ -355,7 +521,6 @@ let dMode = true;
 
       {/* Login segment */}
       <LoginScreen id="login-screen">
-
         <View>
           <Page loginScreen>
             <Navbar small>
@@ -364,10 +529,10 @@ let dMode = true;
               </NavRight>
               <LoginScreenTitle>Login</LoginScreenTitle>
             </Navbar>
-            <List strong inset dividersIos form formStoreData id="demo-form" >
+            <List strong inset dividersIos form formStoreData id="demo-form">
               <ListInput
                 type="text"
-                label='Username'
+                label="Username"
                 name="username"
                 clearButton
                 placeholder="Username"
@@ -376,7 +541,7 @@ let dMode = true;
               ></ListInput>
               <ListInput
                 type="password"
-                label='Password'
+                label="Password"
                 name="password"
                 clearButton
                 placeholder="Password"
@@ -392,7 +557,9 @@ let dMode = true;
               <Block>
                 <Button
                   fill
-                  roundIos largeIos tonalIos
+                  roundIos
+                  largeIos
+                  tonalIos
                   id="login-button"
                   text="Continue"
                   onClick={() => {
@@ -401,10 +568,16 @@ let dMode = true;
                       if (user.length > 0 && pass.length > 0) {
                         checkUser();
                       } else {
-                        f7.dialog.alert(`A field is missing!`);
+                        f7.toast
+                          .create({
+                            text: "A field is missing!",
+                            position: "bottom",
+                            icon: '<i class="f7-icons">exclamationmark_triangle</i>',
+                            closeTimeout: 3000,
+                          })
+                          .open();
                       }
-                      f7.dialog.close()
-                      ;
+                      f7.dialog.close();
                     }, 3000);
                   }}
                 />
@@ -414,7 +587,6 @@ let dMode = true;
           </Page>
         </View>
       </LoginScreen>
-
 
       {/* Sign Up Segment */}
       <LoginScreen id="signup-screen">
@@ -430,7 +602,7 @@ let dMode = true;
               <ListInput
                 type="text"
                 name="name"
-                label='Name'
+                label="Name"
                 clearButton
                 placeholder="Enter your name"
                 value={name}
@@ -438,7 +610,7 @@ let dMode = true;
               ></ListInput>
               <ListInput
                 type="text"
-                label='Username'
+                label="Username"
                 name="username"
                 clearButton
                 placeholder="Username"
@@ -447,7 +619,7 @@ let dMode = true;
               ></ListInput>
               <ListInput
                 type="email"
-                label='Email'
+                label="Email"
                 name="email"
                 clearButton
                 placeholder="Email"
@@ -456,7 +628,7 @@ let dMode = true;
               ></ListInput>
               <ListInput
                 type="password"
-                label='Password'
+                label="Password"
                 name="password"
                 clearButton
                 placeholder="Password"
@@ -472,13 +644,20 @@ let dMode = true;
               <Block>
                 <Button
                   fill
-                  roundIos largeIos tonalIos
+                  roundIos
+                  largeIos
+                  tonalIos
                   id="login-button"
                   text="Continue"
                   onClick={() => {
                     f7.dialog.preloader("Signing Up");
                     setTimeout(() => {
-                      if (user.length > 0 && pass.length > 0 && email.length > 0 && name.length > 0) {
+                      if (
+                        user.length > 0 &&
+                        pass.length > 0 &&
+                        email.length > 0 &&
+                        name.length > 0
+                      ) {
                         alertSignUpData();
                       } else {
                         f7.dialog.alert(`A field is missing!`);
@@ -493,7 +672,6 @@ let dMode = true;
           </Page>
         </View>
       </LoginScreen>
-      
     </App>
   );
 };

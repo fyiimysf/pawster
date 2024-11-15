@@ -18,12 +18,12 @@ import {
 import supabase from '../utils/supabase.js';
 
 
-const SettingsPage = ({ dmodeVal, username }) => {
-
+const SettingsPage = ({ dmodeVal, username, name, user, email}) => {
+  
   const audio = document.querySelector('audio');
-
- let bgMute = false;
- let vol = 1;
+  
+let bgMute = false;
+let vol = 1;
 
   const sendDarkMode = async (toggleVal) => {
     const { data, error } = await supabase
@@ -32,7 +32,7 @@ const SettingsPage = ({ dmodeVal, username }) => {
     if (!error) {
       data.forEach(async element => {
         if (username == element.Username) {
-          const { data, error } = await supabase
+          const { error } = await supabase
 
             .from('users')
             .update({ darkMode: toggleVal })
@@ -52,8 +52,32 @@ const SettingsPage = ({ dmodeVal, username }) => {
   return (
     <Page name="settings">
       <Navbar title="Settings" />
-
-
+      <Card>
+          <br/>
+      <CardContent>
+        <List dividersIos mediaList outlineIos strongIos>
+        <ListItem
+        title={name}
+        subtitle={user}
+        text={email}
+        >
+        <img
+          slot="media"
+          style={{ borderRadius: '10px' }}
+          src="https://vbjluyefvsofglojkskp.supabase.co/storage/v1/object/public/pawster_assets/imgs/def_av.png"
+          width="80"
+        />
+      </ListItem>
+        </List>
+      </CardContent>
+      <br/>
+        <Block className="grid grid-cols-2 grid-gap">
+            <Button fillMd roundIos largeIos tonalIos popupOpen="#my-popup">Manage</Button>
+            <Button  textColor="red" borderColor='red' outlineMd roundIos largeIos tonalIos loginScreenOpen="#main-screen" >Sign Out</Button>
+        </Block>
+      <br/>
+    </Card>
+        
 
       <Block>
         <p>This is an example of tabs-layout application.
@@ -67,7 +91,7 @@ const SettingsPage = ({ dmodeVal, username }) => {
 
       <BlockTitle>Appearance</BlockTitle>
       <List strong inset dividersIos>
-        <ListItem title="DarkMode" >
+        <ListItem defaultChecked title="DarkMode" >
           <Toggle slot="after"
           value={dmodeVal}
             onToggleChange={(e) => {
@@ -98,7 +122,7 @@ const SettingsPage = ({ dmodeVal, username }) => {
         </ListItem>
       </List>
       <audio  autoPlay loop>
-        <source src="../assets/sounds/yawn.mp3" type="audio/mpeg" />
+        <source src="https://vbjluyefvsofglojkskp.supabase.co/storage/v1/object/public/pawster_assets/sounds/yawn.mp3" type="audio/mpeg" />
       </audio>
 
 

@@ -32,7 +32,7 @@ function CatLogPage() {
     let BirdDivShow = true
     let DogDivShow = true
     const SelectPaw = (val) => {
-        console.log(val)
+        // console.log(val)
         if (val == 0) {
             CatDivShow = false
             BirdDivShow = true
@@ -72,13 +72,9 @@ function CatLogPage() {
             </Block>
 
             <div hidden={CatDivShow}>
-                <CardExp cardHieght={400} height={500} textHieght={25} location={'../assets/imgs/CarDB/car1.jpeg'} />
-                <CardExp cardHieght={400} height={700} textHieght={25} location={'../assets/imgs/CarDB/car2.jpeg'} />
-                <CardExp cardHieght={400} height={700} textHieght={25} location={'../assets/imgs/CarDB/car3.jpeg'} />
-                <CardExp cardHieght={400} height={700} textHieght={25} location={'../assets/imgs/CarDB/car4.jpeg'} />
-                <CardExp cardHieght={400} height={700} textHieght={25} location={'../assets/imgs/CarDB/car5.jpeg'} />
-                <CardExp cardHieght={400} height={700} textHieght={25} location={'../assets/imgs/CarDB/car6.jpeg'} />
-                <CardExp cardHieght={400} height={700} textHieght={25} location={'../assets/imgs/CarDB/car7.jpeg'} />
+                <CardExp cardHieght={400} height={500} textHieght={25} location={'https://vbjluyefvsofglojkskp.supabase.co/storage/v1/object/sign/pawster_assets/imgs/CarDB/car10.jpeg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwYXdzdGVyX2Fzc2V0cy9pbWdzL0NhckRCL2NhcjEwLmpwZWciLCJpYXQiOjE3MzE2NjQ0NTUsImV4cCI6MjA0NzAyNDQ1NX0.nvkLbugQbFng9ia_EX2wO8FL25Lh-jnrguZphQS-x1Q'} />
+                <CardExp cardHieght={400} height={500} textHieght={25} location={'https://vbjluyefvsofglojkskp.supabase.co/storage/v1/object/sign/pawster_assets/imgs/CarDB/car12.jpeg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwYXdzdGVyX2Fzc2V0cy9pbWdzL0NhckRCL2NhcjEyLmpwZWciLCJpYXQiOjE3MzE2NjQ0NzEsImV4cCI6MjA0NzAyNDQ3MX0.aiCKiEe64bymya2qgJTwvSRAx7ruQWKGSOCTMDEY9RM'} />
+
             </div>
 
 
