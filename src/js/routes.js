@@ -67,15 +67,22 @@ var routes = [
         var user = {
           firstName: 'Mohammad',
           lastName: 'Yousaf',
-          about: 'Yo, I am the creator of this app, this app is made in Framework7',
+          about: 'Yo, I am the creator of this app, this app is made using React, Framework7 and Supabase.',
           links: [
             {
+              icon: 'logo_instagram',
               title: 'Instagram'  ,
-              url: 'http://framework7.io',
+              url: 'https://www.instagram.com/uceph.em/',
             },
             {
-              title: 'Framework7 Forum',
-              url: 'http://forum.framework7.io',
+              icon: 'logo_github',
+              title: 'Github',
+              url: 'https://github.com/fyiimysf',
+            },
+            {
+              icon: '',
+              title: 'BlueSky',
+              url: 'https://bsky.app/profile/uceph-em.bsky.social',
             },
           ]
         };

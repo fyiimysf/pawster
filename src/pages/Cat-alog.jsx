@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from "react";
 import {
     Page,
     Navbar,
@@ -8,6 +8,7 @@ import {
     NavRight,
     Link,
     Toolbar,
+    SkeletonBlock,
     Block,
     BlockTitle,
     List,
@@ -21,72 +22,94 @@ import {
     CardHeader,
     Subnavbar,
     Segmented,
-    Popover
-} from 'framework7-react';
-import CardExp from '../components/cardExpandable';
+    Popover,
+    f7,
+} from "framework7-react";
+import supabase from "../utils/supabase.js";
+
+import CardExp from "../components/cardExpandable";
+
+function CatLogPage({user, getfavLis}) {
+    let imgCount = 20;
+    
 
 
-function CatLogPage() {
-
-    let CatDivShow = false
-    let BirdDivShow = true
-    let DogDivShow = true
-    const SelectPaw = (val) => {
-        // console.log(val)
-        if (val == 0) {
-            CatDivShow = false
-            BirdDivShow = true
-            CatDivShow = true
-        }
-        else if (val == 1) {
-            CatDivShow = !CatDivShow
-            BirdDivShow = !BirdDivShow
-            CatDivShow = !DogDivShow
-        }
-        else if (val == 2) {
-            CatDivShow = !CatDivShow
-            BirdDivShow = !BirdDivShow
-            CatDivShow = !DogDivShow
-        }
+    var carUrls = [];
+    for (let i = 1; i <= imgCount; i++) {
+        carUrls.push(
+            `https://vbjluyefvsofglojkskp.supabase.co/storage/v1/object/public/pawster_assets/imgs/CarDB/car${i}.jpeg`
+        );        
+    }
+    var birdUrls = [];
+    for (let i = 1; i <= imgCount; i++) {
+        birdUrls.push(
+            `https://vbjluyefvsofglojkskp.supabase.co/storage/v1/object/public/pawster_assets/imgs/BirdDB/bird${i}.jpg`
+        );
     }
 
-    let cardExpH = 700
+    const [animal, setAnimal] = useState(carUrls);
+
+    let cardExpH = 700;
     return (
-        <Page className='safe-area' name="catlog">
+        <Page className="safe-area" name="catlog">
             {/* Top Navbar */}
-            <Navbar title='Pawster' >
+            <Navbar title="Pawster">
                 <NavRight>
-                    <Button popoverOpen='.paw-pop'>
-                        <Icon f7='paw' />
+                    <Button popoverOpen=".paw-pop">
+                        <Icon f7="paw" />
                     </Button>
                 </NavRight>
             </Navbar>
 
             {/* Page content */}
 
-            <Block>
-                <p>
-                    In addition to usual <a href="/cards/">Cards</a> there are also Expandable Cards that allow
-                    to store more information and illustrations about particular subject.
-                </p>
-            </Block>
+            <center>
+                <h1>Cat-alog</h1>
+            </center>
 
-            <div hidden={CatDivShow}>
-                <CardExp cardHieght={400} height={500} textHieght={25} location={'https://vbjluyefvsofglojkskp.supabase.co/storage/v1/object/sign/pawster_assets/imgs/CarDB/car10.jpeg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwYXdzdGVyX2Fzc2V0cy9pbWdzL0NhckRCL2NhcjEwLmpwZWciLCJpYXQiOjE3MzE2NjQ0NTUsImV4cCI6MjA0NzAyNDQ1NX0.nvkLbugQbFng9ia_EX2wO8FL25Lh-jnrguZphQS-x1Q'} />
-                <CardExp cardHieght={400} height={500} textHieght={25} location={'https://vbjluyefvsofglojkskp.supabase.co/storage/v1/object/sign/pawster_assets/imgs/CarDB/car12.jpeg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwYXdzdGVyX2Fzc2V0cy9pbWdzL0NhckRCL2NhcjEyLmpwZWciLCJpYXQiOjE3MzE2NjQ0NzEsImV4cCI6MjA0NzAyNDQ3MX0.aiCKiEe64bymya2qgJTwvSRAx7ruQWKGSOCTMDEY9RM'} />
-
-            </div>
-
+            {animal.map((url, index) => (
+                <CardExp
+                    key={index}
+                    cardHieght={400}
+                    height={500}
+                    textHieght={330}
+                    location={url}
+                    Header={`Card ${index + 1}`}
+                    sunHeader={`Card ${index + 1}`}
+                    user={user}
+                    getFavsList={getfavLis}
+                />
+            ))}
 
             <Popover className="paw-pop">
                 <List>
-                    <ListItem link onClick={SelectPaw(0)} popoverClose title="Cats" />
-                    <ListItem link onClick={SelectPaw(1)} popoverClose title="Birds" />
-                    <ListItem link onClick={SelectPaw(2)} popoverClose title="Dogs" />
+                    <ListItem
+                        link
+                        onClick={() => {
+                            f7.progressbar.show();
+                            setTimeout(() => {
+                                f7.progressbar.hide();
+                                setAnimal(carUrls);
+                            }, 1500);
+                        }}
+                        popoverClose
+                        title="Cats"
+                    />
+                    <ListItem
+                        link
+                        onClick={() => {
+                            f7.progressbar.show();
+                            setTimeout(() => {
+                                f7.progressbar.hide();
+                                setAnimal(birdUrls);
+                            }, 1500);
+                        }}
+                        popoverClose
+                        title="Birds"
+                    />
+                    <ListItem link onClick={() => { }} popoverClose title="Dogs" />
                 </List>
             </Popover>
-
-
         </Page>
     );
 }

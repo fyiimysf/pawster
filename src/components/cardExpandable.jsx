@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from "react";
 import {
     Page,
     Navbar,
@@ -17,74 +17,184 @@ import {
     Card,
     CardContent,
     CardHeader,
-    CardFooter
-} from 'framework7-react';
+    CardFooter,
+} from "framework7-react";
+import supabase from "../utils/supabase.js";
 
+function CardExp({
+    Header,
+    sunHeader,
+    location,
+    cardWidth,
+    cardHieght,
+    height,
+    textHieght,
+    user,
+    getFavsList,
+}) {
+    
+    
+    var fav = [];
+    fav = getFavsList;
+    const [favicon, setFavicon] = React.useState("heart");
+    const getFavs = async () => {
+        const { data, error } = await supabase
+            .from("users")
+            .select("Favorites")
+            .eq("Username", user);
+        if (!error) {
+            fav = data[0].Favorites;   
+            console.log(fav);
+        }
+        
+    }
+    fav.find((element) => {
+        if (element == location) {
+            setFavicon("heart_fill");
+        }
+    });
+    const addFav = async () => {
+        await getFavs();
+        fav.find((element) => {
+            if (element == location) {
+                return;
+            }
+        });
+        fav.push(location);
+        const { data, error } = await supabase
+            .from("users")
+            .update({ Favorites: fav })
+            .select("Favorites")
+            .eq("Username", user);
+        if (!error) {
+            data[0].Favorites = [data[0].Favorites, location];
+            console.log("Fav added");
+        } else {
+            console.log(error.message);
+        }
 
-function CardExp({ Header, sunHeader ,location ,cardWidth , cardHieght ,height, textHieght}) {
+    };
 
+    const removeFav = async () => {
+        await getFavs();
+        fav.splice(fav.indexOf(location), 1);
+        const { data, error } = await supabase
+            .from("users")
+            .update({ fav: fav })
+            .select("fav")
+            .eq("Username", user);
+        if (!error) {
+            data[0].fav = [data[0].fav, location];
+            console.log("Fav removed");
+        } else {
+            console.log(error.message);
+        }
+    };
+
+    const [title, setTitle] = React.useState(Header);
     return (
         <div className="demo-expandable-cards">
-                 <center>
-                 <Card style={{
+            <Card
+                style={{
                     height: `${cardHieght}px`,
-                    width: `${cardWidth}px`
-                
-                }} expandable>
-                    <CardContent padding={false}>
-                    <div 
-                        
-                        style={{ 
-                            background:`url(${location}) no-repeat center  `,
-                            backgroundPosition: 'middle',
-                            height: `${height}px` 
+                    width: `${cardWidth}px`,
+                }}
+                expandable
+                onCardClosed={() => setTitle(Header)}
+                onCardOpen={() => setTitle("")}
+            >
+                <CardContent padding={false}>
+                    <div
+                        style={{
+                            background: `url(${location}) no-repeat center/cover`,
+                            backgroundPosition: "middle",
+                            height: `${height}px`,
                         }}
+                    >
+                        <CardHeader
+                            style={{ top: `${textHieght}px`, fontSize: "30px" }}
+                            textColor="white"
+                            className="card-closed-fade-in"
                         >
-                            <CardHeader style={{top: `${textHieght}px`, fontSize: '30px'}} textColor="white" className="display-block">
+                            {title}
+                            <br />
+                        </CardHeader>
+                        <Link
+                            cardClose
+                            className="card-opened-fade-in"
+                            style={{
+                                position: "absolute",
+                                right: "15px",
+                                top: "15px",
+                                color: "black",
+                            }}
+                            iconF7="xmark_circle"
+                        />
+                    </div>
+                    <div className="card-content-padding">
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                            }}
+                        >
+                            <div style={{ fontSize: "30px" }} className="display-block">
                                 {Header}
                                 <br />
-                                <small style={{ opacity: 0.7, }}>{sunHeader}</small>
-                            </CardHeader>
-                            <Link
-                                cardClose
-                                className="card-opened-fade-in"
-                                style={{ position: 'absolute', right: '15px', top: '15px', color: 'black' }}
-                                iconF7="xmark_circle" />
+                                <small style={{ opacity: 0.8 }}>{sunHeader}</small>
+                            </div>
+                            <Button
+                                raised
+                                onClick={() => {
+                                    if (favicon === "heart") {
+                                        setFavicon("heart_fill");
+                                    } else {
+                                        setFavicon("heart");
+                                    }
+                                }}
+                            >
+                                <Icon f7={favicon} size="35" />
+                            </Button>
                         </div>
-                        <div className="card-content-padding">
-                            <p>
-                                Framework7 - is a free and open source HTML mobile framework to develop hybrid mobile
-                                apps or web apps with iOS or Android (Material) native look and feel. It is also an
-                                indispensable prototyping apps tool to show working app prototype as soon as possible
-                                in case you need to. Framework7 is created by Vladimir Kharlampidi.
-                            </p>
-                            <p>
-                                The main approach of the Framework7 is to give you an opportunity to create iOS and
-                                Android (Material) apps with HTML, CSS and JavaScript easily and clear. Framework7 is
-                                full of freedom. It doesn't limit your imagination or offer ways of any solutions
-                                somehow. Framework7 gives you freedom!
-                            </p>
-                            <p>
-                                Framework7 is not compatible with all platforms. It is focused only on iOS and Android
-                                (Material) to bring the best experience and simplicity.
-                            </p>
-                            <p>
-                                Framework7 is definitely for you if you decide to build iOS and Android hybrid app
-                                (Cordova or Capacitor) or web app that looks like and feels as great native iOS or
-                                Android (Material) apps.
-                            </p>
-                            <p>
-                                <Button outline large cardClose >
-                                    Close
-                                </Button>
-                            </p>
-                        </div>
-                        
-                    </CardContent>
-                </Card>
-
-                </center>
-            </div>
+                        <p>
+                            In contrast, the design of our app is a reflection of our
+                            collective imagination, where a simple and intuitive user
+                            interface is the key to a successful user experience. We are not
+                            limited by the conventions of traditional web design, but rather
+                            we are free to create something truly unique and beautiful.
+                        </p>
+                        <p>
+                            <Button outline large cardClose>
+                                Close
+                            </Button>
+                        </p>
+                    </div>
+                </CardContent>
+            </Card>
+            <Button
+                round
+                fill
+                style={{
+                    position: "absolute",
+                    transform: "translate(335px, -90px)",
+                    width: "50px",
+                    height: "50px",
+                    zIndex: 100,
+                }}
+                onClick={() => {
+                    if (favicon === "heart") {
+                        setFavicon("heart_fill");
+                        addFav();
+                    } else {
+                        setFavicon("heart");
+                        removeFav();
+                    }
+                }}
+            >
+                <Icon f7={favicon} size="35" />
+            </Button>
+        </div>
     );
 }
 export default CardExp;

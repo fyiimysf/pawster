@@ -79,17 +79,9 @@ let vol = 1;
     </Card>
         
 
-      <Block>
-        <p>This is an example of tabs-layout application.
-          The main point of such tabbed layout is that each
-          tab contains independent view with its own routing
-          and navigation.
-        </p>
+      
 
-        <p>Each tab/view may have different layout, different navbar type (dynamic, fixed or static) or without navbar like this tab.</p>
-      </Block>
-
-      <BlockTitle>Appearance</BlockTitle>
+      <BlockTitle>App Settings</BlockTitle>
       <List strong inset dividersIos>
         <ListItem defaultChecked title="DarkMode" >
           <Toggle slot="after"
@@ -126,11 +118,11 @@ let vol = 1;
       </audio>
 
 
-      <BlockTitle>Modals</BlockTitle>
+      {/* <BlockTitle>Modals</BlockTitle>
       <Block className="grid grid-cols-2 grid-gap">
         <Button fillMd roundIos largeIos tonalIos popupOpen="#my-popup">Popup</Button>
         <Button fillMd roundIos largeIos tonalIos loginScreenOpen='#login-screen' >Login Screen</Button>
-      </Block>
+      </Block> */}
         <BlockTitle>Other</BlockTitle>
       <List strong inset dividersIos>
         <ListItem link="/about/" title="About" />
@@ -141,7 +133,7 @@ let vol = 1;
           />
 
         <ListItem
-          title="Request Data & Load"
+          title="Creator"
           link="/request-and-load/user/123456/"
         />
       </List>

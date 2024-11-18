@@ -55,7 +55,7 @@ function MainPage() {
           f7.loginScreen.close();
           f7.loginScreen.close();
         }}  >Demo the App</Button>
-         </center>
+        </center>
       </Block>
     </Page>
   );

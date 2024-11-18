@@ -94,6 +94,7 @@ const MyApp = () => {
   const [user, setUsername, getUsername] = useState("");
   const [email, setEmail, getEmail] = useState("");
   const [pass, setPassword, getPassword] = useState("");
+  const [favList, setFavList] = useState([])
   const toastIcon = useRef(null);
 
   //------------------    TOASTS    ------------------------
@@ -211,6 +212,8 @@ const MyApp = () => {
     }
   }
 
+    
+
   //CHECK USER Func
   async function checkUser() {
     let uBool = false;
@@ -273,6 +276,17 @@ const MyApp = () => {
     );
   };
 
+  const getFavs = async () => {
+        const { data, error } = await supabase
+            .from("users")
+            .select("Favorites")
+            .eq("Username", user);
+        if (!error) {
+            setFavList(data[0].Favorites);
+            console.log(favList);   
+        }
+    }
+
   return (
     <App {...f7params}>
       {/* Views/Tabs container */}
@@ -289,6 +303,9 @@ const MyApp = () => {
             iconIos="f7:heart_fill"
             iconMd="f7:heart_fill"
             text="Favorites"
+            onClick={()=>{
+
+            }}
           />
           <Link
             tabLink="#view-catalog"
@@ -307,7 +324,7 @@ const MyApp = () => {
 
         {/* Your main view/tab, should have "view-main" class. It also has "tabActive" prop */}
         <View className="safe-areas" id="view-acc" tab>
-          <FavPage email={email} name={name} user={user} />
+          <FavPage email={email} name={name} user={user} FavUrls={favList} />
         </View>
 
         {/* Catalog View */}
@@ -318,7 +335,7 @@ const MyApp = () => {
           name="catalog"
           tab
         >
-          <CatLogPage />
+          <CatLogPage user={user} getfavLis={favList}/>
         </View>
 
         {/* Settings View */}
@@ -334,7 +351,7 @@ const MyApp = () => {
       </Views>
 
       {/* Popup */}
-      <Popup id="my-popup">
+      <Popup swipeToClose push id="my-popup">
         <View>
           <Page>
             <Navbar title="Account Settings">
@@ -363,7 +380,7 @@ const MyApp = () => {
                   <ListItem
                     title="Change Username"
                     onClick={() => {
-                      f7.dialog.prompt("Enter your new username", (val) => {
+                      f7.dialog.prompt("","Enter new Username", (val) => {
                         f7.dialog.confirm(
                           `Are you sure you want to change your username to ${val}?`,
                           async () => {
@@ -388,8 +405,9 @@ const MyApp = () => {
                   <ListItem
                     title="Change Password"
                     onClick={() => {
-                      f7.dialog.prompt(
-                        "Enter your old password",
+                      f7.dialog.password(
+                        "",
+                        "Enter Old Password",
                         async (val) => {
                           const { data, error } = await supabase
                             .from("users")
@@ -398,8 +416,9 @@ const MyApp = () => {
                           if (!error) {
                             data.forEach((element) => {
                               if (val == element.Password) {
-                                f7.dialog.prompt(
-                                  "Enter your new password",
+                                f7.dialog.password(
+                                  "Must be 12 charaters long",
+                                  "Enter New Password",
                                   (val) => {
                                     f7.dialog.confirm(
                                       `Are you sure you want to change your password?`,
@@ -434,7 +453,7 @@ const MyApp = () => {
                   <ListItem
                     title="Change Email"
                     onClick={() => {
-                      f7.dialog.prompt("Enter your new Email", (val) => {
+                      f7.dialog.prompt("","Enter New Email", (val) => {
                         f7.dialog.confirm(
                           `Are you sure you want to change your Email to ${val}?`,
                           async () => {
@@ -457,7 +476,7 @@ const MyApp = () => {
                   <ListItem
                     title="Change Name"
                     onClick={() => {
-                      f7.dialog.prompt("Enter your new Name", (val) => {
+                      f7.dialog.prompt("","Enter New Name", (val) => {
                         f7.dialog.confirm(
                           `Are you sure you want to change your Name to ${val}?`,
                           async () => {
@@ -582,6 +601,31 @@ const MyApp = () => {
                   }}
                 />
                 <br></br>
+                <Button
+                  id="forget-button"
+                  text="Forgot Password?"
+                  onClick={() => {
+                    f7.dialog.prompt("Enter your username", (val) => {
+                      f7.dialog.prompt("Enter your email", async (val2) => {
+                        const { data, error } = await supabase
+                          .from("users")
+                          .select("Password")
+                          .eq("Username", val)
+                          .eq("Email", val2);
+                        if (!error) {
+                          data.forEach((element) => {
+                            f7.dialog.alert(
+                              `Your Password is: ${element.Password}`
+                            );
+                          });
+                        } else {
+                          console.log(error.message);
+                        }
+                      });
+                    });
+                  }}
+                />
+                <br></br>
               </Block>
             </List>
           </Page>
@@ -637,7 +681,7 @@ const MyApp = () => {
                 onInput={(e) => setPassword(e.target.value)}
               ></ListInput>
               <BlockFooter>
-                Password should be maximum 12 characters login
+                Password should be maximum 12 characters long
               </BlockFooter>
             </List>
             <List>
