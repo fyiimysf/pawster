@@ -27,7 +27,10 @@ import {
   CardContent,
 } from "framework7-react";
 import { element } from "prop-types";
+
+
 import React, { useRef, useState, useEffect } from "react";
+
 
 
 
@@ -36,7 +39,18 @@ function MainPage() {
 
   return (
     
-    <Page loginScreen noToolbar noNavbar noSwipeback>
+    <Page
+    onPageAfterIn={()=>{
+
+      f7.toast.create({
+        icon: '<i class="f7-icons">person_crop_circle_badge_checkmark</i>',
+        text: "This App can be installed using 'Add to Homescreen' option",
+        position: "center",
+        closeButton: true,
+        closeTimeout: 1000,
+      }).open();
+    }
+    } loginScreen noToolbar noNavbar noSwipeback>
       
       <Block className="grid grid-gap">
         <BlockTitle large>
@@ -54,7 +68,16 @@ function MainPage() {
           f7.loginScreen.close();
           f7.loginScreen.close();
           f7.loginScreen.close();
+          f7.toast.create({
+            icon: '<i class="f7-icons">exclamationmark</i>',
+            text: 'Demo Mode<br/> Not all features are available',
+            position: "center",
+            closeButton: true,
+            closeTimeout: 2000
+          }).open();
         }}  >Demo the App</Button>
+
+
         </center>
       </Block>
     </Page>

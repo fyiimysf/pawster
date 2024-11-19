@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Page,
     Navbar,
@@ -28,16 +28,16 @@ function CardExp({
     cardWidth,
     cardHieght,
     height,
-    textHieght,
+    favSet = useState("heart"),
     user,
-    getFavsList,
+    getFavsList = [],
 }) {
     
-    
     var fav = [];
-    fav = getFavsList;
-    const [favicon, setFavicon] = React.useState("heart");
+    // fav = getFavsList;
+    const [favicon, setFavicon] = React.useState(favSet);
     const getFavs = async () => {
+        console.log(user);
         const { data, error } = await supabase
             .from("users")
             .select("Favorites")
@@ -45,19 +45,25 @@ function CardExp({
         if (!error) {
             fav = data[0].Favorites;   
             console.log(fav);
+            // if (fav.includes(location)) {
+            //     setFavicon("heart_fill");
+            // }
         }
         
     }
-    fav.find((element) => {
-        if (element == location) {
+    useEffect(()=>{
+        if (!favSet) {
+            setFavicon("heart");
+        }else{
             setFavicon("heart_fill");
         }
-    });
+    },[]);
+
     const addFav = async () => {
         await getFavs();
         fav.find((element) => {
             if (element == location) {
-                return;
+                removeFav();
             }
         });
         fav.push(location);
@@ -77,14 +83,18 @@ function CardExp({
 
     const removeFav = async () => {
         await getFavs();
-        fav.splice(fav.indexOf(location), 1);
+        fav.find((element) => {
+            if (element == location) {
+                fav.splice(fav.indexOf(element), 1);
+            }
+        });
         const { data, error } = await supabase
             .from("users")
-            .update({ fav: fav })
-            .select("fav")
+            .update({ Favorites: fav })
+            .select("Favorites")
             .eq("Username", user);
         if (!error) {
-            data[0].fav = [data[0].fav, location];
+            data[0].Favorites = [data[0].Favorites, location];
             console.log("Fav removed");
         } else {
             console.log(error.message);
@@ -93,7 +103,11 @@ function CardExp({
 
     const [title, setTitle] = React.useState(Header);
     return (
-        <div className="demo-expandable-cards">
+        <div onLoad={ () => {
+            
+        }
+
+        } className="demo-expandable-cards">
             <Card
                 style={{
                     height: `${cardHieght}px`,
@@ -112,7 +126,7 @@ function CardExp({
                         }}
                     >
                         <CardHeader
-                            style={{ top: `${textHieght}px`, fontSize: "30px" }}
+                            style={{ top: `${0}px`, fontSize: "30px" }}
                             textColor="white"
                             className="card-closed-fade-in"
                         >
@@ -177,18 +191,20 @@ function CardExp({
                 fill
                 style={{
                     position: "absolute",
-                    transform: "translate(335px, -90px)",
+                    right: "20px",
+                    marginTop: "-90px",
+                    // marginTop: "-410px",
                     width: "50px",
                     height: "50px",
                     zIndex: 100,
                 }}
-                onClick={() => {
+                onClick={async () => {
                     if (favicon === "heart") {
                         setFavicon("heart_fill");
-                        addFav();
+                        await addFav();
                     } else {
                         setFavicon("heart");
-                        removeFav();
+                        await removeFav();
                     }
                 }}
             >

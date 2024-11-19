@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Page,
   Navbar,
@@ -13,6 +13,7 @@ import {
   Card,
   CardContent,
   CardHeader,
+  PhotoBrowser,
   f7,
 } from 'framework7-react';
 import supabase from '../utils/supabase.js';
@@ -49,9 +50,18 @@ let vol = 1;
     }
   };
 
+  const photos = [
+    {
+      url: "https://vbjluyefvsofglojkskp.supabase.co/storage/v1/object/public/pawster_assets/imgs/def_av.png",
+      caption: '',
+    },
+  ];  const standaloneDark = useRef(null);
   return (
     <Page name="settings">
+      <PhotoBrowser photos={photos}  theme="dark" ref={standaloneDark} />
+
       <Navbar title="Settings" />
+      
       <Card>
           <br/>
       <CardContent>
@@ -62,6 +72,7 @@ let vol = 1;
         text={email}
         >
         <img
+        onClick={() => standaloneDark.current.open()}
           slot="media"
           style={{ borderRadius: '10px' }}
           src="https://vbjluyefvsofglojkskp.supabase.co/storage/v1/object/public/pawster_assets/imgs/def_av.png"
@@ -125,15 +136,15 @@ let vol = 1;
       </Block> */}
         <BlockTitle>Other</BlockTitle>
       <List strong inset dividersIos>
-        <ListItem link="/about/" title="About" />
-        <ListItem link="/form/" title="Send a report" />
+        {/* <ListItem link="/about/" title="About" />
         <ListItem
           title="Dynamic (Component) Route"
-          link="/dynamic-route/blog/45/post/125/?foo=bar#about"
-          />
+          link="/dynamic-route/blog/45/post/6969/?foo=bar#about"
+          /> */}
 
+          <ListItem link="/form/" title="Report a bug" />
         <ListItem
-          title="Creator"
+          title="About"
           link="/request-and-load/user/123456/"
         />
       </List>

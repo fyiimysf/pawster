@@ -10,6 +10,7 @@ import SettingsPage from '../pages/settings.jsx';
 import SignupPage from '../pages/signup.jsx';
 import DynamicRoutePage from '../pages/dynamic-route.jsx';
 import RequestAndLoad from '../pages/request-and-load.jsx';
+import FavPage from '../pages/favPage.jsx';
 
 var routes = [
   {
@@ -17,8 +18,8 @@ var routes = [
     component: CatLogPage,
   },
   {
-    path: '/about/',
-    component: AboutPage,
+    path: '/fav/',
+    component: FavPage,
   },
   {
     path: '/login/',
@@ -50,13 +51,18 @@ var routes = [
     component: DynamicRoutePage,
   },
   {
+    path: '/about/',
+    component: AboutPage,
+  },
+  
+  {
     path: '/request-and-load/user/:userId/',
     async: function ({ router, to, resolve }) {
       // App instance
       var app = router.app;
 
       // Show Preloader
-      app.preloader.show();
+      app.progressbar.show();
 
       // User ID from request
       var userId = to.params.userId;
@@ -87,7 +93,7 @@ var routes = [
           ]
         };
         // Hide Preloader
-        app.preloader.hide();
+        app.progressbar.hide();
 
         // Resolve route to load page
         resolve(
@@ -100,7 +106,7 @@ var routes = [
             }
           }
         );
-      }, 1000);
+      }, 500);
     },
   },
   {

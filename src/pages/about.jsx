@@ -7,20 +7,12 @@ const AboutPage = () => (
     <BlockTitle>About My App</BlockTitle>
     <Block>
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magni molestiae laudantium
-        dignissimos est nobis delectus nemo ea alias voluptatum architecto, amet similique, saepe
-        iste consectetur in repellat ut minus quibusdam!
+        My app is a simple app that allows users to view a list of items and select items to add to their favorites. It also has a settings page where users can change the app theme between light and dark.
       </p>
       <p>
-        Molestias et distinctio porro nesciunt ratione similique, magni doloribus, rerum nobis,
-        aliquam quae reiciendis quasi modi. Nam a recusandae, fugiat in ea voluptates fuga eius,
-        velit corrupti reprehenderit dignissimos consequatur!
+        The app uses the Framework7 library to create a mobile-friendly interface. The app also uses the Supabase library to store and retrieve data from a PostgreSQL database.
       </p>
-      <p>
-        Blanditiis, cumque quo adipisci. Molestiae, dolores dolorum quos doloremque ipsa ullam
-        eligendi commodi deserunt doloribus inventore magni? Ea mollitia veniam nostrum nihil, iusto
-        doloribus a at! Ea molestiae ullam delectus!
-      </p>
+
     </Block>
   </Page>
 );

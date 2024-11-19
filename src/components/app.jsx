@@ -213,15 +213,26 @@ const MyApp = () => {
   }
 
     
+  
+  const getFavs = async () => {
+        const { data, error } = await supabase
+            .from("users")
+            .select("Favorites")
+            .eq("Username", user);
+        if (!error) {
+            setFavList(data[0].Favorites);
+            console.log("GOT FROM APP.js: "+ favList);   
+        }
+    }
 
   //CHECK USER Func
   async function checkUser() {
     let uBool = false;
     let pBool = false;
-
+      
     const { data: unames, error: errorU } = await supabase
       .from("users")
-      .select("Username,Email,Name,darkMode");
+      .select("*");
     if (!errorU) {
       unames.forEach((element) => {
         if (user == element.Username) {
@@ -237,6 +248,7 @@ const MyApp = () => {
             f7.setDarkMode(false);
             console.log("darkMode is " + dMode);
           }
+          getFavs();
         }
       });
     } else {
@@ -276,16 +288,6 @@ const MyApp = () => {
     );
   };
 
-  const getFavs = async () => {
-        const { data, error } = await supabase
-            .from("users")
-            .select("Favorites")
-            .eq("Username", user);
-        if (!error) {
-            setFavList(data[0].Favorites);
-            console.log(favList);   
-        }
-    }
 
   return (
     <App {...f7params}>
@@ -299,15 +301,16 @@ const MyApp = () => {
         {/* Tabbar for switching views-tabs */}
         <Toolbar icons tabbar bottom>
           <Link
+          href="/favorites/"
             tabLink="#view-acc"
             iconIos="f7:heart_fill"
             iconMd="f7:heart_fill"
             text="Favorites"
-            onClick={()=>{
-
-            }}
+            
+            
           />
           <Link
+          href="/catalog/"
             tabLink="#view-catalog"
             tabLinkActive
             iconIos="f7:paw"
@@ -315,6 +318,7 @@ const MyApp = () => {
             text="Cat-alog"
           />
           <Link
+            href="/settings/"
             tabLink="#view-settings"
             iconIos="f7:gear"
             iconMd="material:settings"
@@ -323,8 +327,11 @@ const MyApp = () => {
         </Toolbar>
 
         {/* Your main view/tab, should have "view-main" class. It also has "tabActive" prop */}
-        <View className="safe-areas" id="view-acc" tab>
-          <FavPage email={email} name={name} user={user} FavUrls={favList} />
+        {/* Favorites View */}
+        <View onTabShow={() => {
+          getFavs();      
+        }} className="safe-areas" id="view-acc" tab>
+          <FavPage email={email} name={name} userr={user} Favurls={favList} />
         </View>
 
         {/* Catalog View */}
@@ -335,7 +342,7 @@ const MyApp = () => {
           name="catalog"
           tab
         >
-          <CatLogPage user={user} getfavLis={favList}/>
+          <CatLogPage userr={user} getfavLis={favList}/>
         </View>
 
         {/* Settings View */}
@@ -583,10 +590,10 @@ const MyApp = () => {
                   text="Continue"
                   onClick={() => {
                     f7.dialog.preloader("Logging In");
-                    setTimeout(() => {
+                    setTimeout(async () => {
                       if (user.length > 0 && pass.length > 0) {
-                        checkUser();
-                      } else {
+                        await checkUser();
+                      } else if (user.length == 0) {
                         f7.toast
                           .create({
                             text: "A field is missing!",
@@ -597,7 +604,7 @@ const MyApp = () => {
                           .open();
                       }
                       f7.dialog.close();
-                    }, 3000);
+                    });
                   }}
                 />
                 <br></br>
