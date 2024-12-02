@@ -81,14 +81,14 @@ var routes = [
               url: 'https://www.instagram.com/uceph.em/',
             },
             {
+              icon: 'logo_twitter',
+              title: 'BlueSky',
+              url: 'https://bsky.app/profile/uceph-em.bsky.social',
+            },
+            {
               icon: 'logo_github',
               title: 'Github',
               url: 'https://github.com/fyiimysf',
-            },
-            {
-              icon: '',
-              title: 'BlueSky',
-              url: 'https://bsky.app/profile/uceph-em.bsky.social',
             },
           ]
         };

@@ -20,31 +20,31 @@ import CardExp from "../components/cardExpandable";
 import supabase from "../utils/supabase.js";
 
 
-function FavPage({ Favurls = [],  name, userr, email }) {
+function FavPage({ Favurls = [], name, userr, email }) {
   const [FavUrls, setFavUrls] = useState(Favurls);
   const getFavs = async () => {
-      const { data, error } = await supabase
-          .from("users")
-          .select("Favorites")
-          .eq("Username", userr);
-      if (!error) {
-        setFavUrls(data[0].Favorites);
-        console.log(FavUrls);
-      }
+    const { data, error } = await supabase
+      .from("users")
+      .select("Favorites")
+      .eq("Username", userr);
+    if (!error) {
+      setFavUrls(data[0].Favorites);
+      console.log(FavUrls);
+    }
   }
 
   function FavCard() {
     f7.progressbar.show();
     setTimeout(() => {
       getFavs();
-        f7.progressbar.hide();
-    }, 1000); 
+      f7.progressbar.hide();
+    }, 1000);
   }
 
   const reload = (done) => {
     setTimeout(() => {
-        FavCard();
-        done();
+      FavCard();
+      done();
     }, 1000);
   };
 
@@ -63,7 +63,7 @@ function FavPage({ Favurls = [],  name, userr, email }) {
             <Icon size={60} f7="heart_slash" />
             <h4>
               It's empty here,<br></br>Add some favorites from the{" "}
-              <a  onClick={()=>{
+              <a onClick={() => {
               }} >Cat-alog</a> page
             </h4>
             {
@@ -76,19 +76,19 @@ function FavPage({ Favurls = [],  name, userr, email }) {
       )}
 
       {FavUrls.length > 0 && (
-          FavUrls.map((url, index) => (
-            <CardExp
+        FavUrls.map((url, index) => (
+          <CardExp
             key={index}
             cardHieght={400}
             height={500}
             textHieght={330}
             location={url}
-            Header={`Card ${index + 1}`}
-            sunHeader={`Card ${index + 1}`}
+            Header={`${url.split("/")[url.split("/").length - 1].split(".")[0]}`} //prints the name of the image
+            sunHeader={`${url.split("/")[url.split("/").length - 1].split(".")[0]}`} //prints the name of the image
             user={userr}
             favSet={"heart_fill"}
-            />
-          ))
+          />
+        ))
       )}
 
     </Page>

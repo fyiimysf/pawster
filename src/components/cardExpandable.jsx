@@ -28,7 +28,7 @@ function CardExp({
     cardWidth,
     cardHieght,
     height,
-    favSet = useState("heart"),
+    favSet = useState(""),
     user,
     getFavsList = [],
 }) {
@@ -51,13 +51,9 @@ function CardExp({
         }
         
     }
-    useEffect(()=>{
-        if (!favSet) {
-            setFavicon("heart");
-        }else{
-            setFavicon("heart_fill");
-        }
-    },[]);
+
+   
+    
 
     const addFav = async () => {
         await getFavs();
@@ -104,7 +100,7 @@ function CardExp({
     const [title, setTitle] = React.useState(Header);
     return (
         <div onLoad={ () => {
-            
+          
         }
 
         } className="demo-expandable-cards">

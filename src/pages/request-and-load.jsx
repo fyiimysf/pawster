@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Page, Navbar, Block, List, ListItem, BlockTitle, NavTitle, PhotoBrowser } from 'framework7-react';
+import { Page, Navbar, Block, List, ListItem, BlockTitle, NavTitle, PhotoBrowser, Icon } from 'framework7-react';
 
 const RequestAndLoad = (props) => {
   const { user } = props;
@@ -39,12 +39,13 @@ const RequestAndLoad = (props) => {
       <List strong inset dividersIos>
         {user.links.map((link, index) => (
           <ListItem
+            
             key={index}
             link={link.url}
             title={link.title}
             external
             target="_blank"
-          ></ListItem>
+          ><Icon f7={link.icon} /></ListItem>
         ))}
       </List>
     </Page>

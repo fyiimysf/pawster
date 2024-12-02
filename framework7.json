@@ -16,7 +16,7 @@
     "iconFonts": true
   },
   "customBuild": false,
-  "pkg": "io.framework7.myapp",
+  "pkg": "io.framework7.pawster",
   "capacitor": {
     "platforms": [
       "android"
