@@ -43,62 +43,48 @@ function MainPage() {
 
 
       loginScreen noToolbar noNavbar noSwipeback>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
+      
 
       <Block className="grid grid-gap">
         <BlockTitle large>
           <center>
             <h1>Pawster</h1>
-            <Icon size={60} f7="paw" />
-
+            <Icon size={70} f7="paw" />
+      
           </center>
         </BlockTitle >
         <Button large fillMd roundIos largeIos tonalIos loginScreenOpen='#login-screen'>Login</Button>
         <Button large fillMd roundIos largeIos tonalIos loginScreenOpen='#signup-screen' >SignUp</Button>
         <center> <BlockHeader>Feline paws, could be yours</BlockHeader>
 
-          <Button small onClick={() => {
+        
+        <Block className="grid grid-cols-2 "  >
+
+        <Button small onClick={() => {
             f7.loginScreen.close();
             f7.loginScreen.close();
             f7.loginScreen.close();
             f7.toast.create({
-              icon: '<i class="f7-icons">exclamationmark</i>',
-              text: 'Demo Mode<br/> Not all features are available',
+              icon: '<i class="f7-icons">exclamationmark_triangle</i>',
+              text: 'Demo Mode<br/> features not available: <ol><li>Favorite Cats</li><li>Dark Mode</li><li>Settings</li></ol>',
               position: "center",
               closeButton: true,
-              closeTimeout: 2000
+              closeTimeout: 2500
             }).open();
-          }}  >Demo the App</Button>
+          }}  >Demo</Button>
 
-
-        </center>
-      </Block>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <Block >
-
-        <Button onClick={() => 
+          <Button small onClick={() => 
           f7.dialog.alert('To install Pawster on your phone,<br/> Press "Add to Homescreen" in Chrome menu.','How To Install')
         }>
-        <Icon size={44} f7="info_circle" />
+        Install
         </Button>
+        </Block>
+          
+        </center>
       </Block>
+      
+      
+       
     </Page>
   );
 }
